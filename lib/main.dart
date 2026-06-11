@@ -1,6 +1,17 @@
+import 'dart:html' as html;
+import 'dart:ui_web' as ui_web;
+
 import 'package:flutter/material.dart';
 
 void main() {
+  ui_web.platformViewRegistry.registerViewFactory('html-input', (int viewId) {
+    return html.InputElement()
+      ..value = 'Test Copy Paste'
+      ..style.width = '300px'
+      ..style.height = '50px'
+      ..style.fontSize = '16px';
+  });
+
   runApp(const MyApp());
 }
 
@@ -11,41 +22,22 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TextFieldDemo(),
+      home: TestPage(),
     );
   }
 }
 
-class TextFieldDemo extends StatefulWidget {
-  const TextFieldDemo({super.key});
-
-  @override
-  State<TextFieldDemo> createState() => _TextFieldDemoState();
-}
-
-class _TextFieldDemoState extends State<TextFieldDemo> {
-  final TextEditingController _controller = TextEditingController();
+class TestPage extends StatelessWidget {
+  const TestPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: SizedBox(
           width: 350,
-          child: TextField(
-            controller: _controller,
-            enableInteractiveSelection: true,
-            contextMenuBuilder:
-                (BuildContext context, EditableTextState editableTextState) {
-                  return AdaptiveTextSelectionToolbar.editableText(
-                    editableTextState: editableTextState,
-                  );
-                },
-            decoration: const InputDecoration(
-              labelText: 'Enter Text',
-              border: OutlineInputBorder(),
-            ),
-          ),
+          height: 60,
+          child: HtmlElementView(viewType: 'html-input'),
         ),
       ),
     );
