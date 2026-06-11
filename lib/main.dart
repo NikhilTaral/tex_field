@@ -1,17 +1,7 @@
-import 'dart:html' as html;
-import 'dart:ui_web' as ui_web;
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  ui_web.platformViewRegistry.registerViewFactory('html-input', (int viewId) {
-    return html.InputElement()
-      ..value = 'Test Copy Paste'
-      ..style.width = '300px'
-      ..style.height = '50px'
-      ..style.fontSize = '16px';
-  });
-
   runApp(const MyApp());
 }
 
@@ -20,24 +10,91 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: TestPage(),
-    );
+    return const MaterialApp(home: TextFieldDemo());
   }
 }
 
-class TestPage extends StatelessWidget {
-  const TestPage({super.key});
+class TextFieldDemo extends StatefulWidget {
+  const TextFieldDemo({super.key});
+
+  @override
+  State<TextFieldDemo> createState() => _TextFieldDemoState();
+}
+
+class _TextFieldDemoState extends State<TextFieldDemo> {
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focusNode = FocusNode();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
+
+  // ── Copy/Paste-only context menu ──────────────────────────────────────────
+  static Widget _copyPasteMenuBuilder(
+    BuildContext context,
+    EditableTextState editableTextState,
+  ) {
+    final bool hasSelection =
+        !editableTextState.textEditingValue.selection.isCollapsed &&
+        editableTextState.textEditingValue.selection.isValid;
+
+    return AdaptiveTextSelectionToolbar.buttonItems(
+      anchors: editableTextState.contextMenuAnchors,
+      buttonItems: [
+        // Copy — only when something is selected
+        if (hasSelection)
+          ContextMenuButtonItem(
+            label: 'Copy',
+            onPressed: () {
+              editableTextState.copySelection(SelectionChangedCause.toolbar);
+              ContextMenuController.removeAny();
+            },
+          ),
+
+        // Paste — always available
+        ContextMenuButtonItem(
+          label: 'Paste',
+          onPressed: () async {
+            final ClipboardData? data = await Clipboard.getData(
+              Clipboard.kTextPlain,
+            );
+            if (data?.text != null) {
+              editableTextState.pasteText(SelectionChangedCause.toolbar);
+            }
+            ContextMenuController.removeAny();
+          },
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: SizedBox(
-          width: 350,
-          height: 60,
-          child: HtmlElementView(viewType: 'html-input'),
+    return Scaffold(
+      appBar: AppBar(title: const Text('TextFormField Test')),
+      body: Container(
+        constraints: const BoxConstraints(maxWidth: 500),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: TextFormField(
+            controller: controller,
+            focusNode: focusNode,
+            autofocus: false,
+            readOnly: false,
+            textAlign: TextAlign.start,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            enableInteractiveSelection: true,
+            // ── plug in the custom menu here ──
+            contextMenuBuilder: _copyPasteMenuBuilder,
+            decoration: const InputDecoration(
+              labelText: 'Enter Text',
+              border: OutlineInputBorder(),
+            ),
+          ),
         ),
       ),
     );
