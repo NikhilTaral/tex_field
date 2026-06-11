@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -29,77 +30,26 @@ class TextFieldScreen extends StatefulWidget {
 }
 
 class _TextFieldScreenState extends State<TextFieldScreen> {
-  // The controller gives you access to the text the user types
   final TextEditingController _textController = TextEditingController();
+  final TextEditingController _fasttextController = TextEditingController();
 
   @override
   void dispose() {
-    // Always dispose of the controller to prevent memory leaks
     _textController.dispose();
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Single TextField')),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: TextField(
-            controller: _textController,
-            decoration: const InputDecoration(
-              labelText: 'Enter your text',
-              hintText: 'Type something here...',
-              border: OutlineInputBorder(),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(home: TextFieldDemo());
-  }
-}
-
-class TextFieldDemo extends StatefulWidget {
-  const TextFieldDemo({super.key});
-
-  @override
-  State<TextFieldDemo> createState() => _TextFieldDemoState();
-}
-
-class _TextFieldDemoState extends State<TextFieldDemo> {
-  final TextEditingController controller = TextEditingController();
-  final FocusNode focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    focusNode.dispose();
-    super.dispose();
-  }
-
-  // ── Copy/Paste-only context menu ──────────────────────────────────────────
   static Widget _copyPasteMenuBuilder(
     BuildContext context,
     EditableTextState editableTextState,
   ) {
-    final bool hasSelection =
-        !editableTextState.textEditingValue.selection.isCollapsed &&
-        editableTextState.textEditingValue.selection.isValid;
+    final TextSelection selection =
+        editableTextState.textEditingValue.selection;
+    final bool hasSelection = selection.isValid && !selection.isCollapsed;
 
     return AdaptiveTextSelectionToolbar.buttonItems(
       anchors: editableTextState.contextMenuAnchors,
-      buttonItems: [
-        // Copy — only when something is selected
+      buttonItems: <ContextMenuButtonItem>[
         if (hasSelection)
           ContextMenuButtonItem(
             label: 'Copy',
@@ -108,17 +58,16 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
               ContextMenuController.removeAny();
             },
           ),
-
-        // Paste — always available
         ContextMenuButtonItem(
           label: 'Paste',
           onPressed: () async {
-            final ClipboardData? data = await Clipboard.getData(
-              Clipboard.kTextPlain,
-            );
-            if (data?.text != null) {
-              editableTextState.pasteText(SelectionChangedCause.toolbar);
-            }
+            final data = await Clipboard.getData(Clipboard.kTextPlain);
+            final text = data?.text ?? '';
+
+            debugPrint('Pasted: $text');
+
+            editableTextState.pasteText(SelectionChangedCause.toolbar);
+
             ContextMenuController.removeAny();
           },
         ),
@@ -129,29 +78,74 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TextFormField Test')),
-      body: Container(
-        constraints: const BoxConstraints(maxWidth: 500),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: TextFormField(
-            controller: controller,
-            focusNode: focusNode,
-            autofocus: false,
-            readOnly: false,
-            textAlign: TextAlign.start,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.done,
-            enableInteractiveSelection: true,
-            // ── plug in the custom menu here ──
-            contextMenuBuilder: _copyPasteMenuBuilder,
-            decoration: const InputDecoration(
-              labelText: 'Enter Text',
-              border: OutlineInputBorder(),
+      appBar: AppBar(title: const Text('Single TextField')),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              children: [
+                textFormWidget(_fasttextController),
+                SizedBox(height: 20),
+                TextField(
+                  controller: _textController,
+                  enableInteractiveSelection: true,
+                  contextMenuBuilder: _copyPasteMenuBuilder,
+                  decoration: const InputDecoration(
+                    labelText: 'Enter your text',
+                    hintText: 'Type something here...',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
+  }
+  // Source - https://stackoverflow.com/q/65976071
+  // Posted by DIVYANSHU SAHU, modified by community. See post 'Timeline' for change history
+  // Retrieved 2026-06-11, License - CC BY-SA 4.0
+
+  Widget textFormWidget(TextEditingController controller) {
+    TextSelectionControls? _selectionControls;
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextFormField(
+        controller: controller,
+        selectionControls: _selectionControls,
+        enabled: true,
+        enableInteractiveSelection: true,
+        readOnly: false,
+        textAlign: TextAlign.center,
+        cursorWidth: 3,
+        decoration: const InputDecoration(labelText: "stak1"),
+      ),
+    );
+  }
+}
+// Source - https://stackoverflow.com/a/71912865
+// Posted by Arenukvern
+// Retrieved 2026-06-11, License - CC BY-SA 4.0
+
+class AppCupertinoTextSelectionControls extends CupertinoTextSelectionControls {
+  AppCupertinoTextSelectionControls({required this.onPaste});
+  ValueChanged<TextSelectionDelegate> onPaste;
+  @override
+  Future<void> handlePaste(final TextSelectionDelegate delegate) {
+    onPaste(delegate);
+    return super.handlePaste(delegate);
+  }
+}
+
+class AppMaterialTextSelectionControls extends MaterialTextSelectionControls {
+  AppMaterialTextSelectionControls({required this.onPaste});
+  ValueChanged<TextSelectionDelegate> onPaste;
+  @override
+  Future<void> handlePaste(final TextSelectionDelegate delegate) {
+    onPaste(delegate);
+    return super.handlePaste(delegate);
   }
 }
