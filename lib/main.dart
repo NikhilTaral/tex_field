@@ -2,7 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const SimpleTextFieldApp());
+}
+
+class SimpleTextFieldApp extends StatelessWidget {
+  const SimpleTextFieldApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Simple TextField',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
+      ),
+      home: const TextFieldScreen(),
+    );
+  }
+}
+
+class TextFieldScreen extends StatefulWidget {
+  const TextFieldScreen({super.key});
+
+  @override
+  State<TextFieldScreen> createState() => _TextFieldScreenState();
+}
+
+class _TextFieldScreenState extends State<TextFieldScreen> {
+  // The controller gives you access to the text the user types
+  final TextEditingController _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    // Always dispose of the controller to prevent memory leaks
+    _textController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Single TextField')),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: TextField(
+            controller: _textController,
+            decoration: const InputDecoration(
+              labelText: 'Enter your text',
+              hintText: 'Type something here...',
+              border: OutlineInputBorder(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
