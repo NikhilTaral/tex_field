@@ -9,7 +9,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: TextFieldDemo());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: TextFieldDemo(),
+    );
   }
 }
 
@@ -21,33 +24,23 @@ class TextFieldDemo extends StatefulWidget {
 }
 
 class _TextFieldDemoState extends State<TextFieldDemo> {
-  final TextEditingController controller = TextEditingController();
-  final FocusNode focusNode = FocusNode();
-
-  @override
-  void dispose() {
-    controller.dispose();
-    focusNode.dispose();
-    super.dispose();
-  }
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TextFormField Test')),
-      body: Container(
-        constraints: BoxConstraints(maxWidth: 500),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: TextFormField(
-            controller: controller,
-            focusNode: focusNode,
+      body: Center(
+        child: SizedBox(
+          width: 350,
+          child: TextField(
+            controller: _controller,
             enableInteractiveSelection: true,
-            autofocus: false,
-            readOnly: false,
-            textAlign: TextAlign.start,
-            keyboardType: TextInputType.text,
-            textInputAction: TextInputAction.done,
+            contextMenuBuilder:
+                (BuildContext context, EditableTextState editableTextState) {
+                  return AdaptiveTextSelectionToolbar.editableText(
+                    editableTextState: editableTextState,
+                  );
+                },
             decoration: const InputDecoration(
               labelText: 'Enter Text',
               border: OutlineInputBorder(),
