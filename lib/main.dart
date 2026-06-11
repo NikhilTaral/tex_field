@@ -42,12 +42,12 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
           child: TextFormField(
             controller: controller,
             focusNode: focusNode,
+            enableInteractiveSelection: true,
             autofocus: false,
             readOnly: false,
             textAlign: TextAlign.start,
             keyboardType: TextInputType.text,
             textInputAction: TextInputAction.done,
-            enableInteractiveSelection: true,
             decoration: const InputDecoration(
               labelText: 'Enter Text',
               border: OutlineInputBorder(),
