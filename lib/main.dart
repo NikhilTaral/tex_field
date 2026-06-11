@@ -38,7 +38,7 @@ class _TextFieldDemoState extends State<TextFieldDemo> {
       body: Container(
         constraints: BoxConstraints(maxWidth: 500),
         child: Padding(
-          padding: const EdgeInsets.all(30),
+          padding: const EdgeInsets.all(16),
           child: TextFormField(
             controller: controller,
             focusNode: focusNode,
