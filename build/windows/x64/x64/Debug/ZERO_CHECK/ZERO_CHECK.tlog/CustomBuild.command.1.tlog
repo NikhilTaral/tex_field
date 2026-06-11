@@ -1,0 +1,10 @@
+^C:\USERS\NIKHIL.TARAL\DOCUMENTS\GITHUB\TEST\TEX_FIELD\BUILD\WINDOWS\X64\CMAKEFILES\B9197343F7853B817B2FC93BC0C3FA52\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/nikhil.taral/Documents/GitHub/TEST/tex_field/windows -BC:/Users/nikhil.taral/Documents/GitHub/TEST/tex_field/build/windows/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/nikhil.taral/Documents/GitHub/TEST/tex_field/build/windows/x64/text_field.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

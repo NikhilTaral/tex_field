@@ -1,0 +1,28 @@
+^C:\USERS\NIKHIL.TARAL\DOCUMENTS\GITHUB\TEST\TEX_FIELD\BUILD\WINDOWS\X64\CMAKEFILES\B29939A2A44EA9247A0F3A6E3F6BE0CB\FLUTTER_WINDOWS.DLL.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E env FLUTTER_ROOT=C:\flutter PROJECT_DIR=C:\Users\nikhil.taral\Documents\GitHub\TEST\tex_field FLUTTER_ROOT=C:\flutter FLUTTER_EPHEMERAL_DIR=C:\Users\nikhil.taral\Documents\GitHub\TEST\tex_field\windows\flutter\ephemeral PROJECT_DIR=C:\Users\nikhil.taral\Documents\GitHub\TEST\tex_field FLUTTER_TARGET=C:\Users\nikhil.taral\Documents\GitHub\TEST\tex_field\lib\main.dart DART_DEFINES=RkxVVFRFUl9WRVJTSU9OPTMuMzIuNw==,RkxVVFRFUl9DSEFOTkVMPXN0YWJsZQ==,RkxVVFRFUl9HSVRfVVJMPWh0dHBzOi8vZ2l0aHViLmNvbS9mbHV0dGVyL2ZsdXR0ZXIuZ2l0,RkxVVFRFUl9GUkFNRVdPUktfUkVWSVNJT049ZDdiNTIzYjM1Ng==,RkxVVFRFUl9FTkdJTkVfUkVWSVNJT049MzlkNmQ2ZTY5OQ==,RkxVVFRFUl9EQVJUX1ZFUlNJT049My44LjE= DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=false PACKAGE_CONFIG=C:\Users\nikhil.taral\Documents\GitHub\TEST\tex_field\.dart_tool\package_config.json C:/flutter/packages/flutter_tools/bin/tool_backend.bat windows-x64 Debug
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\NIKHIL.TARAL\DOCUMENTS\GITHUB\TEST\TEX_FIELD\BUILD\WINDOWS\X64\CMAKEFILES\AFBC0D9A2218939EFA3CD0BD7251B666\FLUTTER_ASSEMBLE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^C:\USERS\NIKHIL.TARAL\DOCUMENTS\GITHUB\TEST\TEX_FIELD\WINDOWS\FLUTTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/nikhil.taral/Documents/GitHub/TEST/tex_field/windows -BC:/Users/nikhil.taral/Documents/GitHub/TEST/tex_field/build/windows/x64 --check-stamp-file C:/Users/nikhil.taral/Documents/GitHub/TEST/tex_field/build/windows/x64/flutter/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
